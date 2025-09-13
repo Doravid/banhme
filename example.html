@@ -7,20 +7,30 @@
 
     <script id="vertex-shader" type="x-shader/x-vertex">
         attribute vec4 vPosition;
+        attribute vec2 vTexCoord;
         uniform mat4 modelMatrix;
+        varying vec2 fTexCoord;
 
         void main() {
             gl_Position = modelMatrix * vPosition;
+            fTexCoord = vTexCoord;
         }
     </script>
 
-    <script id="fragment-shader" type="x-shader/x-fragment">
-        precision mediump float;
+<script id="fragment-shader" type="x-shader/x-fragment">
+    precision mediump float;
+    varying vec2 fTexCoord;
 
-        void main() {
-            gl_FragColor = vec4(0.2, 0.4, 0.8, 1.0);
+    uniform sampler2D u_texture;
+
+    void main() {
+        vec4 texColor = texture2D(u_texture, fTexCoord);
+        if (texColor.a < 0.1) {
+            discard;
         }
-    </script>
+        gl_FragColor = texColor;
+    }
+</script>
     <script src="lib/webgl-utils.js"></script>
     <script src="lib/initShaders.js"></script>
     <script src="lib/MV.js"></script>
@@ -30,7 +40,7 @@
 <body>
 
     <div class="container">
-      <canvas id="gl-canvas" width="1024" height="102"></canvas>
+      <canvas id="gl-canvas" width="1024" height="1024"></canvas>
         <div id="overlay">
             <div><span id="dialog"></span></div>
         </div>
