@@ -1,12 +1,14 @@
-body {
+html, body {
+  height: 100%;
+  font-family: 'Courier New', monospace;
   margin: 0;
 }
 
 .container {
-  position: relative;
   display: flex;
-
+  height: 100vh; /* fill full viewport height */
 }
+
 
 
 #overlay {
@@ -23,8 +25,83 @@ body {
   visibility: hidden;
 }
 
-.dictionary{
+#dictionary {
+  flex-grow: 1;
+  height: 100%;
+  box-sizing: border-box;
+  overflow-y: auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  background-image: url("page_bg.jpg"); /* The image used */
+  border-left: 2px solid #ddd;
+
+  display: flex;               /* ← This is the missing piece */
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center;     /* center items horizontally */
+  align-content: center;       /* center items vertically if there’s extra space */
+}
+
+#journal_title{
+  text-align: center;
+}
+
+#actual_word_list{
+  width: 100%;
+  display: flex;               /* ← This is the missing piece */
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center;     /* center items horizontally */
+  align-content: center;
+}
+
+
+
+/* Word cards */
+.word {
   display: flex;
-  justify-content: center; 
-  align-items: center; 
+  justify-content: space-between;
+  align-items: center;
+  background-color: #fff;
+  padding: 20px 15px; /* taller padding */
+  margin-bottom: 15px;
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  width: 50%;      /* take 50% of #dictionary's width */
+  min-height: 60px; /* keep taller height */
+  box-sizing: border-box;
+}
+
+/* Vietnamese and English word styling */
+.wordVn, .wordEng {
+  margin: 0;
+  font-size: 20px; /* bigger font */
+  color: #444;
+  white-space: nowrap; /* prevent line breaks if you want */
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.wordVn {
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.wordEng {
+  color: #7f8c8d;
+}
+
+.wordEngInput {
+  border: none;
+  border-bottom: 5px solid #ccc;
+  outline: none;
+  font-size: 16px;
+  padding: 4px 0;
+  background-color: transparent;
+  width: 20%;
+  transition: border-color 0.3s;
+}
+
+.wordEngInput:focus {
+  border-bottom-color: #007BFF; /* or any highlight color you prefer */
 }
