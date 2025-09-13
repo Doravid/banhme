@@ -27,13 +27,13 @@ let currentLevel;
 let shouldIterateText = false;
 
 window.onload = function init() {
-  dictionary();
   canvas = document.getElementById("gl-canvas");
   gl = WebGLUtils.setupWebGL(canvas, null);
 
   levels = loadLevels();
   currentLevel = levels[0];
   currentNpcs = currentLevel.npc_array;
+  dictionary(currentLevel.words);
 
   if (!gl) {
     alert("WebGL isn't available");
@@ -221,6 +221,7 @@ function loadLevel(levelNum) {
   currentLevel = levels[levelNum];
   currentNpcs = currentLevel.npc_array;
   backgroundTexture = loadTexture(gl, currentLevel.image);
+  dictionary(currentLevel.words);
   for (const npc of currentNpcs) {
     npc.texture = loadTexture(gl, npc.image);
   }
