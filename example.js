@@ -8,7 +8,12 @@ const npcSize = 0.2;
 let playerScale = 0.25;
 let npcTexture;
 let backgroundTexture;
+
 let playerTexture;
+let playerTextureBack;
+let playerTextureLeft;
+let playerTextureRight;
+
 let squarePositionBuffer;
 let squareTexCoordBuffer;
 let backgroundPositionBuffer;
@@ -61,8 +66,14 @@ window.onload = function init() {
     backgroundTexCoordBuffer = squareTexCoordBuffer;
 
     npcTexture = loadTexture(gl, "https://www.dev-fern.com/Untitled.png");
+
     backgroundTexture = loadTexture(gl, "https://www.dev-fern.com/Untitled.png");
-    playerTexture = loadTexture(gl, "https://www.dev-fern.com/character.png");
+    
+	playerTextureFront = loadTexture(gl, "https://www.dev-fern.com/character.png");
+	playerTextureBack = loadTexture(gl, "https://www.dev-fern.com/character_back.png");
+    playerTextureLeft = loadTexture(gl, "https://www.dev-fern.com/character_left.png");
+    playerTextureRight = loadTexture(gl, "https://www.dev-fern.com/character_right.png");
+    playerTexture = playerTextureFront;
     
     currentNpcs.push(vec2(0.5, 0.5));
     currentNpcs.push(vec2(-0.2, 0.3));
@@ -82,10 +93,22 @@ window.onload = function init() {
 };
 
 document.addEventListener("keydown", (e) => {
-    if (e.key == 'w') velocity[1] = 0.01;
-    if (e.key == 'a') velocity[0] = -0.01;
-    if (e.key == 's') velocity[1] = -0.01;
-    if (e.key == 'd') velocity[0] = 0.01;
+    if (e.key == 'w') {
+		velocity[1] = 0.01;
+		playerTexture = playerTextureBack;
+	}
+    if (e.key == 'a') {
+		velocity[0] = -0.01;
+		playerTexture = playerTextureLeft;
+	}
+    if (e.key == 's') {
+		velocity[1] = -0.01;
+		playerTexture = playerTextureFront;
+	}
+    if (e.key == 'd') {
+		velocity[0] = 0.01;
+		playerTexture = playerTextureRight;
+	}
 }, false);
 
 document.addEventListener("keyup", (e) => {
