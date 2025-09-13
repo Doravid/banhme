@@ -27,6 +27,7 @@ let currentLevel;
 let shouldIterateText = false;
 
 window.onload = function init() {
+  dictionary();
   canvas = document.getElementById("gl-canvas");
   gl = WebGLUtils.setupWebGL(canvas, null);
 
