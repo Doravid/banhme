@@ -12,5 +12,3 @@ const words = [
         "eng": "You"
     }
 ]
-
-export default words;

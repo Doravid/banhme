@@ -18,6 +18,8 @@ let dialogNode;
 let canvas;
 
 window.onload = function init() {
+    dictionary();
+
     canvas = document.getElementById("gl-canvas");
     gl = WebGLUtils.setupWebGL(canvas, null);
     if (!gl) { alert("WebGL isn't available"); }
