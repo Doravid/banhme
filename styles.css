@@ -4,7 +4,11 @@ body {
 
 .container {
   position: relative;
+  display: flex;
+
 }
+
+
 #overlay {
   position: absolute;
   background-color: rgba(55, 55, 55, 0.8);
@@ -17,4 +21,10 @@ body {
 }
 .hidden {
   visibility: hidden;
+}
+
+.dictionary{
+  display: flex;
+  justify-content: center; 
+  align-items: center; 
 }
