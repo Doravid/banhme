@@ -32,7 +32,28 @@ html, body {
   padding: 20px;
   background-color: #f9f9f9;
   border-left: 2px solid #ddd;
+
+  display: flex;               /* ← This is the missing piece */
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center;     /* center items horizontally */
+  align-content: center;       /* center items vertically if there’s extra space */
 }
+
+#journal_title{
+  text-align: center;
+}
+
+#actual_word_list{
+  width: 100%;
+  display: flex;               /* ← This is the missing piece */
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center;     /* center items horizontally */
+  align-content: center;
+}
+
+
 
 /* Word cards */
 .word {
@@ -44,8 +65,8 @@ html, body {
   margin-bottom: 15px;
   border-radius: 6px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-  width: 200px; /* smaller width */
-  min-height: 60px; /* taller height */
+  width: 50%;      /* take 50% of #dictionary's width */
+  min-height: 60px; /* keep taller height */
   box-sizing: border-box;
 }
 
