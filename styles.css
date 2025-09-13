@@ -1,0 +1,20 @@
+body {
+  margin: 0;
+}
+
+.container {
+  position: relative;
+}
+#overlay {
+  position: absolute;
+  background-color: rgba(55, 55, 55, 0.8);
+  color: white;
+  padding: 5px;
+  border-radius: 4px;
+  left: 0;
+  top: 0;
+  transform: translateX(-50%);
+}
+.hidden {
+  visibility: hidden;
+}
