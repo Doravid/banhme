@@ -22,7 +22,7 @@ let itemThreeTexture;
 
 let currentItem = -1;
 let hasHeldItem = false;
-let items;
+let currentitems;
 
 let squarePositionBuffer;
 let squareTexCoordBuffer;
@@ -43,7 +43,7 @@ window.onload = function init() {
   levels = loadLevels();
   currentLevel = levels[0];
   currentNpcs = currentLevel.npc_array;
-  dictionary(currentLevel.words);
+  dictionary(currentLevel.words, currentLevel.isFinished); //currentLevel.isFinished is always false here
 
   if (!gl) {
     alert("WebGL isn't available");
@@ -186,25 +186,41 @@ document.addEventListener(
 function updatePosition() {
   position = add(position, velocity);
   //Left Right
-  if (position[0] > 0.95 && currentLevel.connections.right >= 0) {
+  if (
+    position[0] > 0.95 &&
+    currentLevel.connections.right >= 0 &&
+    currentLevel.isFinished
+  ) {
     loadLevel(currentLevel.connections.right);
     position[1] = 0;
     position[0] = -0.9;
   } else if (position[0] > 0.95) position[0] = 0.95 * Math.sign(position[0]);
-  if (position[0] < -0.95 && currentLevel.connections.left >= 0) {
+  if (
+    position[0] < -0.95 &&
+    currentLevel.connections.left >= 0 &&
+    currentLevel.isFinished
+  ) {
     loadLevel(currentLevel.connections.right);
     position[1] = 0;
     position[0] = 0.9;
   } else if (position[0] < -0.95) position[0] = 0.95 * Math.sign(position[0]);
   //Up Down
-  if (position[1] > 0.95 && currentLevel.connections.up >= 0) {
+  if (
+    position[1] > 0.95 &&
+    currentLevel.connections.up >= 0 &&
+    currentLevel.isFinished
+  ) {
     loadLevel(currentLevel.connections.up);
     position[1] = -0.9;
     position[0] = 0;
     console.log(currentLevel.connections);
   } else if (position[1] > 0.95) position[1] = 0.95 * Math.sign(position[1]);
 
-  if (position[1] < -0.95 && currentLevel.connections.down >= 0) {
+  if (
+    position[1] < -0.95 &&
+    currentLevel.connections.down >= 0 &&
+    currentLevel.isFinished
+  ) {
     loadLevel(currentLevel.connections.down);
     position[1] = 0.9;
     position[0] = 0;
@@ -325,6 +341,7 @@ function render() {
 }
 function levelIsFinished() {
   currentLevel.isFinished = true;
+  console.log("hi");
 }
 function loadTexture(gl, url) {
   const texture = gl.createTexture();
