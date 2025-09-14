@@ -255,7 +255,7 @@ function loadLevel(levelNum) {
   currentLevel = levels[levelNum];
   currentNpcs = currentLevel.npc_array;
   backgroundTexture = loadTexture(gl, currentLevel.image);
-  dictionary(currentLevel.words);
+  dictionary(currentLevel.words, currentLevel.isFinished);
   for (const npc of currentNpcs) {
     npc.texture = loadTexture(gl, npc.image);
   }
@@ -323,7 +323,9 @@ function render() {
 
   requestAnimationFrame(render);
 }
-
+function levelIsFinished() {
+  currentLevel.isFinished = true;
+}
 function loadTexture(gl, url) {
   const texture = gl.createTexture();
   gl.bindTexture(gl.TEXTURE_2D, texture);
