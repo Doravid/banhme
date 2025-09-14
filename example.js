@@ -259,6 +259,7 @@ function handleNpc() {
       ) {
         npc.iterator = 1;
         npc.dialogues = ["yippiee", "yippie"];
+        autoFillThree()
       } else {
         npc.dialogues = dialogues[2];
       }
