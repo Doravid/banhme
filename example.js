@@ -4,8 +4,10 @@ let programInfo = {};
 let velocity = vec2(0.0, 0.0);
 let position = vec2(0, 0.0);
 let currentNpcs = [];
+
 const npcSize = 0.23;
 let playerScale = 0.25;
+
 let npcTexture;
 let backgroundTexture;
 
@@ -13,6 +15,14 @@ let playerTexture;
 let playerTextureBack;
 let playerTextureLeft;
 let playerTextureRight;
+
+let itemOneTexture;
+let itemTwoTexture;
+let itemThreeTexture;
+
+let currentItem = -1;
+let hasHeldItem = false;
+let items;
 
 let squarePositionBuffer;
 let squareTexCoordBuffer;
@@ -110,6 +120,19 @@ window.onload = function init() {
     "https://www.dev-fern.com/character_right.png"
   );
   playerTexture = playerTextureFront;
+
+  itemOneTexture = loadTexture(
+    gl,
+    "https://www.dev-fern.com/character_right.png"
+  );
+  itemTwoTexture = loadTexture(
+    gl,
+    "https://www.dev-fern.com/character_right.png"
+  );
+  itemThreeTexture = loadTexture(
+    gl,
+    "https://www.dev-fern.com/character_right.png"
+  );
 
   dialogElement = document.querySelector("#dialog");
   dialogNode = document.createTextNode("");
@@ -236,6 +259,11 @@ function loadLevel(levelNum) {
   for (const npc of currentNpcs) {
     npc.texture = loadTexture(gl, npc.image);
   }
+  if (currentLevel.items) {
+    for (const item of currentLevel.items) {
+      itemtexture = loadTexture(gl, item.image);
+    }
+  }
 }
 function render() {
   gl.clear(gl.COLOR_BUFFER_BIT);
@@ -271,6 +299,17 @@ function render() {
     );
     gl.uniformMatrix4fv(programInfo.modelMatrix, false, flatten(modelMatrix));
     gl.drawArrays(gl.TRIANGLES, 0, 6);
+  }
+  if (currentLevel.items) {
+    for (const item of currentLevel.items) {
+      gl.bindTexture(gl.TEXTURE_2D, item.texture);
+      let modelMatrix = mult(
+        translate(npc.position[0], npc.position[1], 0),
+        scalem(npcSize, npcSize, 1)
+      );
+      gl.uniformMatrix4fv(programInfo.modelMatrix, false, flatten(modelMatrix));
+      gl.drawArrays(gl.TRIANGLES, 0, 6);
+    }
   }
 
   gl.bindTexture(gl.TEXTURE_2D, playerTexture);
