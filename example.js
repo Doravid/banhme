@@ -202,10 +202,21 @@ function handleNpc() {
         shouldIterateText = false;
       }
       isNearAnNpc = true;
-      const pixelX = (npc.position[0] * 0.5 + 0.5) * canvas.width;
-      const pixelY = (npc.position[1] * -0.5 + 0.5) * canvas.height;
-      overlay.style.left = `${Math.floor(pixelX)}px`;
-      overlay.style.top = `${Math.floor(pixelY) - 40}px`;
+      let offset = 0;
+      if (npc.iterator % 2 == 0) {
+        offset = 50;
+        const pixelX = (position[0] * 0.5 + 0.5) * canvas.width;
+        const pixelY = (position[1] * -0.5 + 0.5) * canvas.height;
+        overlay.style.top = `${Math.floor(pixelY) + offset}px`;
+        overlay.style.left = `${Math.floor(pixelX)}px`;
+      } else {
+        offset = -50;
+        const pixelX = (npc.position[0] * 0.5 + 0.5) * canvas.width;
+        const pixelY = (npc.position[1] * -0.5 + 0.5) * canvas.height;
+        overlay.style.top = `${Math.floor(pixelY) + offset}px`;
+        overlay.style.left = `${Math.floor(pixelX)}px`;
+      }
+
       dialogNode.nodeValue = npc.dialogues[npc.iterator];
       overlay.classList.remove("hidden");
 
@@ -285,7 +296,7 @@ function loadTexture(gl, url) {
   const border = 0;
   const srcFormat = gl.RGBA;
   const srcType = gl.UNSIGNED_BYTE;
-  const pixel = new Uint8Array([0, 0, 255, 255]);
+  const pixel = new Uint8Array([0, 0, 0, 255]);
   gl.texImage2D(
     gl.TEXTURE_2D,
     level,
