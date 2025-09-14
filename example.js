@@ -39,6 +39,8 @@ let canvas;
 let levels = [];
 let currentLevel;
 let shouldIterateText = false;
+let hasAccepted = false;
+let hasRejected = false;
 
 window.onload = function init() {
   canvas = document.getElementById("gl-canvas");
@@ -179,6 +181,12 @@ document.addEventListener(
     if (e.key == " ") {
       shouldIterateText = true;
     }
+    if (e.key == "y") {
+      shouldIterateText = true;
+    }
+    if (e.key == "n") {
+      shouldIterateText = true;
+    }
   },
   false
 );
@@ -243,6 +251,7 @@ function handleNpc() {
 
   for (const npc of currentNpcs) {
     if (length(subtract(npc.position, position)) < minDistance) {
+      //Number GUY LOGIC
       if (
         currentLevel.items &&
         currentItem == currentLevel.items[2] &&
@@ -253,6 +262,21 @@ function handleNpc() {
       } else {
         npc.dialogues = dialogues[2];
       }
+      //WATER GUY LOGIC
+      if (
+        npc.id == "number" &&
+        npc.iterator == 2 &&
+        (hasAccepted || hasRejected)
+      ) {
+        if (hasAccepted) {
+          npc.iterator = 3;
+        }
+        npc.iterator = 1;
+        npc.dialogues = ["yippiee", "yippie"];
+      } else {
+        npc.dialogues = dialogues[4];
+      }
+
       if (shouldIterateText) {
         if (npc.iterator + 1 < npc.dialogues.length) {
           npc.iterator += 1;
