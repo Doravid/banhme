@@ -22,7 +22,7 @@ let itemThreeTexture;
 
 let currentItem = -1;
 let hasHeldItem = false;
-let currentitems;
+let currentItems;
 
 let squarePositionBuffer;
 let squareTexCoordBuffer;
@@ -30,6 +30,10 @@ let backgroundPositionBuffer;
 let backgroundTexCoordBuffer;
 let dialogElement;
 let dialogNode;
+
+let itemElement;
+let itemNode;
+
 let canvas;
 
 let levels = [];
@@ -41,7 +45,7 @@ window.onload = function init() {
   gl = WebGLUtils.setupWebGL(canvas, null);
 
   levels = loadLevels();
-  currentLevel = levels[0];
+  currentLevel = levels[1];
   currentNpcs = currentLevel.npc_array;
   dictionary(currentLevel.words, currentLevel.isFinished); //currentLevel.isFinished is always false here
 
@@ -139,6 +143,11 @@ window.onload = function init() {
   dialogElement.appendChild(dialogNode);
   dialogElement.parentElement.parentElement.classList.add("hidden");
 
+  itemElement = document.querySelector("#item");
+  itemNode = document.createTextNode("");
+  itemElement.appendChild(itemNode);
+  itemElement.parentElement.parentElement.classList.add("hidden");
+
   gl.viewport(0, 0, canvas.width, canvas.height);
   gl.clearColor(0.9, 0.9, 0.9, 1.0);
 
@@ -200,7 +209,7 @@ function updatePosition() {
     currentLevel.connections.left >= 0 &&
     currentLevel.isFinished
   ) {
-    loadLevel(currentLevel.connections.right);
+    loadLevel(currentLevel.connections.left);
     position[1] = 0;
     position[0] = 0.9;
   } else if (position[0] < -0.95) position[0] = 0.95 * Math.sign(position[0]);
@@ -234,6 +243,16 @@ function handleNpc() {
 
   for (const npc of currentNpcs) {
     if (length(subtract(npc.position, position)) < minDistance) {
+      if (
+        currentLevel.items &&
+        currentItem == currentLevel.items[2] &&
+        npc.id == "number"
+      ) {
+        npc.iterator = 1;
+        npc.dialogues = ["yippiee", "yippie"];
+      } else {
+        npc.dialogues = dialogues[2];
+      }
       if (shouldIterateText) {
         if (npc.iterator + 1 < npc.dialogues.length) {
           npc.iterator += 1;
@@ -267,6 +286,40 @@ function handleNpc() {
     overlay.classList.add("hidden");
   }
 }
+function handleItem() {
+  if (!currentLevel.items) return;
+  const minDistance = 0.25;
+  let isNearAnItem = false;
+  const overlay = itemElement.parentElement.parentElement;
+
+  for (const item of currentLevel.items) {
+    if (!item.enabled) break;
+    if (length(subtract(item.position, position)) < minDistance) {
+      if (shouldIterateText) {
+        if (currentItem) {
+          currentItem.enabled = true;
+        }
+        currentItem = item;
+        shouldIterateText = false;
+      }
+      isNearAnItem = true;
+      offset = -50;
+      const pixelX = (item.position[0] * 0.5 + 0.5) * canvas.width;
+      const pixelY = (item.position[1] * -0.5 + 0.5) * canvas.height;
+      overlay.style.top = `${Math.floor(pixelY) + offset}px`;
+      overlay.style.left = `${Math.floor(pixelX)}px`;
+
+      itemNode.nodeValue = "Pick Item Up? (space)";
+      overlay.classList.remove("hidden");
+
+      break;
+    }
+  }
+
+  if (!isNearAnItem) {
+    overlay.classList.add("hidden");
+  }
+}
 function loadLevel(levelNum) {
   currentLevel = levels[levelNum];
   currentNpcs = currentLevel.npc_array;
@@ -277,7 +330,7 @@ function loadLevel(levelNum) {
   }
   if (currentLevel.items) {
     for (const item of currentLevel.items) {
-      itemtexture = loadTexture(gl, item.image);
+      item.texture = loadTexture(gl, item.image);
     }
   }
 }
@@ -286,6 +339,7 @@ function render() {
 
   updatePosition();
   handleNpc();
+  handleItem();
 
   gl.useProgram(program);
 
@@ -318,9 +372,10 @@ function render() {
   }
   if (currentLevel.items) {
     for (const item of currentLevel.items) {
+      if (item == currentItem) continue;
       gl.bindTexture(gl.TEXTURE_2D, item.texture);
       let modelMatrix = mult(
-        translate(npc.position[0], npc.position[1], 0),
+        translate(item.position[0], item.position[1], 0),
         scalem(npcSize, npcSize, 1)
       );
       gl.uniformMatrix4fv(programInfo.modelMatrix, false, flatten(modelMatrix));
