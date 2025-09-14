@@ -182,10 +182,10 @@ document.addEventListener(
       shouldIterateText = true;
     }
     if (e.key == "y") {
-      shouldIterateText = true;
+      hasAccepted = true;
     }
     if (e.key == "n") {
-      shouldIterateText = true;
+      hasRejected = true;
     }
   },
   false
@@ -259,25 +259,41 @@ function handleNpc() {
       ) {
         npc.iterator = 1;
         npc.dialogues = ["yippiee", "yippie"];
-        autoFillThree()
-      } else {
+        autoFillThree();
+      } else if (npc.id == "number") {
         npc.dialogues = dialogues[2];
       }
       //WATER GUY LOGIC
-      if (
-        npc.id == "number" &&
-        npc.iterator == 2 &&
-        (hasAccepted || hasRejected)
-      ) {
+      if (npc.id == "water" && (hasAccepted || hasRejected)) {
         npc.iterator = 1;
         if (hasAccepted) {
           npc.dialogues = ["Một nước", "Một nước"];
+          hasAccepted = false;
         }
         if (hasRejected) {
           npc.dialogues = ["Oh.", "Oh."];
+          hasRejected = false;
         }
-      } else if (shouldIterateText && (hasAccepted || hasRejected)) {
-        npc.dialogues = dialogues[2];
+        shouldIterateText = false;
+      } else if (shouldIterateText && npc.id == "water") {
+        npc.dialogues = dialogues[4];
+        iterator = 4;
+      }
+      //BANH ME GUY LOGIC
+      if (npc.id == "jeff" && levels[2].isFinished) {
+        npc.iterator = 1;
+        if (hasAccepted) {
+          npc.dialogues = ["Một nước", "Một nước"];
+          hasAccepted = false;
+        }
+        if (hasRejected) {
+          npc.dialogues = ["Oh.", "Oh."];
+          hasRejected = false;
+        }
+        shouldIterateText = false;
+      } else if (shouldIterateText && npc.id == "water") {
+        npc.dialogues = dialogues[4];
+        iterator = 4;
       }
 
       if (shouldIterateText) {
