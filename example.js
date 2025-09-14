@@ -47,7 +47,7 @@ window.onload = function init() {
   gl = WebGLUtils.setupWebGL(canvas, null);
 
   levels = loadLevels();
-  currentLevel = levels[1];
+  currentLevel = levels[2];
   currentNpcs = currentLevel.npc_array;
   dictionary(currentLevel.words, currentLevel.isFinished); //currentLevel.isFinished is always false here
 
@@ -268,13 +268,15 @@ function handleNpc() {
         npc.iterator == 2 &&
         (hasAccepted || hasRejected)
       ) {
-        if (hasAccepted) {
-          npc.iterator = 3;
-        }
         npc.iterator = 1;
-        npc.dialogues = ["yippiee", "yippie"];
-      } else {
-        npc.dialogues = dialogues[4];
+        if (hasAccepted) {
+          npc.dialogues = ["Một nước", "Một nước"];
+        }
+        if (hasRejected) {
+          npc.dialogues = ["Oh.", "Oh."];
+        }
+      } else if (shouldIterateText && (hasAccepted || hasRejected)) {
+        npc.dialogues = dialogues[2];
       }
 
       if (shouldIterateText) {
