@@ -1,6 +1,6 @@
 # banhme
 ## Banh Me is an educational language learning game.
-Thank you to Chants of Sennhar for the inspireation.
+Thank you to Chants of Sennhar for the inspiration.
 
 ## How to Run
 1. Download the reposity (either using ```git clone https://github.com/Doravid/banhme.git``` or just download as a ZIP).
