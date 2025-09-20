@@ -42,12 +42,14 @@ let shouldIterateText = false;
 let hasAccepted = false;
 let hasRejected = false;
 
+let banhMi = false;
+
 window.onload = function init() {
   canvas = document.getElementById("gl-canvas");
   gl = WebGLUtils.setupWebGL(canvas, null);
 
   levels = loadLevels();
-  currentLevel = levels[2];
+  currentLevel = levels[0];
   currentNpcs = currentLevel.npc_array;
   dictionary(currentLevel.words, currentLevel.isFinished); //currentLevel.isFinished is always false here
 
@@ -280,20 +282,19 @@ function handleNpc() {
         iterator = 4;
       }
       //BANH ME GUY LOGIC
-      if (npc.id == "jeff" && levels[2].isFinished) {
-        npc.iterator = 1;
-        if (hasAccepted) {
-          npc.dialogues = ["Một nước", "Một nước"];
-          hasAccepted = false;
-        }
-        if (hasRejected) {
-          npc.dialogues = ["Oh.", "Oh."];
-          hasRejected = false;
-        }
-        shouldIterateText = false;
-      } else if (shouldIterateText && npc.id == "water") {
-        npc.dialogues = dialogues[4];
-        iterator = 4;
+      if (
+        npc.id == "jeff" &&
+        levels[2].isFinished &&
+        npc.dialogues != dialogues[5]
+      ) {
+        npc.iterator = 0;
+        npc.dialogues = dialogues[5];
+        banhMi = true;
+      }
+
+      if (npc.id == "steve" && banhMi && npc.dialogues != dialogues[6]) {
+        npc.iterator = 0;
+        npc.dialogues = dialogues[6];
       }
 
       if (shouldIterateText) {
